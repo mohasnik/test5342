@@ -79,10 +79,12 @@
 
 extern uint32_t sensor_weight_window[WINDOW];
 extern uint8_t state;
-
+extern uint8_t slave_id;
 
 
 void UART_Init(uint8_t status1, uint8_t status2, uint8_t N);
 void UartCallBack(void);
+
+
 
 #endif

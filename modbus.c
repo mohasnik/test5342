@@ -8,7 +8,7 @@ DEFINE_ISR(UartCallBack, 0x18);
 
 
 
-uint8_t slave_id = 1;
+uint8_t slave_id;
 uint8_t uart_index = 0;
 uint8_t frame[FRAME_SIZE];
 
@@ -53,11 +53,11 @@ void UART_Init(uint8_t status1,uint8_t status2, uint8_t N)
 }
 
 
-
+	
 void UartCallBack(void)
 {
-	//_pa6 = 1;
 	_pa1 = 0;
+
 	
 	do{
 		
@@ -71,9 +71,8 @@ void UartCallBack(void)
 		frame[6] = _utxr_rxr;
 		
 		uart_index++;	
-		
-		
-		if(frame[0] == FRAME_HEADER && frame[6] == FRAME_FOOTER && (frame[1] == slave_id || frame[1] == BROADCASTING_ID)) {
+			
+		if(frame[0] == FRAME_HEADER && frame[FRAME_SIZE - 1] == FRAME_FOOTER && frame[1] == slave_id) {
 			
 			
 			uint8_t i = 0;
@@ -84,15 +83,7 @@ void UartCallBack(void)
 			}
 				
 			if(frame[5] == crc) {		
-				
-				if(frame[2] == MODBUS_RMR) {
-					UART_SEND_FRAME();
-					
-				}
-				else if(frame[2] == MODBUS_CHANGE_ID) {
-					slave_id = frame[3];
-				}
-				
+				UART_SEND_FRAME();
 				uart_index = 0;
 						
 			}
@@ -106,8 +97,7 @@ void UartCallBack(void)
 	}while(_urxif);
 	
 	
-	//_pa6 = 0;
-	_emi = 1;
 	
+
 	
 }

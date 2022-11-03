@@ -45,7 +45,7 @@ void main()
 	ADC_Init();
 	ADC_ENABLEINTERRUPT;
 	
-	
+	slave_id = 1;
 	
 
 	while(TRUE) {
